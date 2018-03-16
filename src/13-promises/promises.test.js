@@ -1,4 +1,4 @@
-import { promiseDef, simplePromise } from './promises';
+import { promiseDef, simplePromise, apiPromise } from './promises';
 
 test('promises def', () => {
 
@@ -21,14 +21,21 @@ test('promises def', () => {
  * Fazer junto
  */
 test('simple promise chaining', (done) => {
-    done();
+    
+    simplePromise('Valor')
+        .then(v => console.log('Meu valor ', v))
+        .then(() => done());
 });
 
 /**
  * Fazer junto
  */
 test('simple promise error catching chaining', (done) => {
-    done();
+    
+    simplePromise()
+        .then(v => console.log('Meu valor na função com erro', v))
+        .catch(error => console.log('Erro: ', error))
+        .then(() => done());
 });
 
 /**
@@ -38,6 +45,14 @@ test('simple promise error catching chaining', (done) => {
  */
 test('refactoring callback exercise', () => {
 
+    apiPromise('/api/treinamento')
+        .then(v => console.log('Sucesso: ', v))
+        .then(() => done());
+
+    apiPromise('/api/treinamento2')
+        .catch(v => console.log('Erro: ', v))
+        .then(() => done());
+
 });
 
 /**
@@ -46,5 +61,15 @@ test('refactoring callback exercise', () => {
  * Refatorar o exercício do encadeamento dos callbacks para utilizar o encadeamento das promises.
  */
 test('refactoring callback chaining promises', () => {
+
+    apiPromise('/api/treinamento')
+        .then(v => {console.log('Sucesso 1: ', v); 
+                    return v;} )
+        .then(v => {console.log('Sucesso 2: ', v); 
+                    return v;} )
+        .then(v => {console.log('Forçando o erro...');
+                    return apiPromise('/api/treinamento2');})
+        .catch(v => console.log('Erro forçado: ', v))
+        .then(() => done());
 
 });

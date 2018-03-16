@@ -27,3 +27,12 @@ export const simplePromise = (value) => new Promise((resolve, reject) => {
         reject('Invalid value');
     }
 });
+
+export const apiPromise = (apiPath) => new Promise((resolve, reject) => {
+
+    if(apiPath == '/api/treinamento') {
+        resolve('API executada');
+    } else {
+        reject('API não encontrada');
+    }
+});
