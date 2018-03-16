@@ -1,4 +1,4 @@
-import { simpleCallback, simplePromise } from './callbacks';
+import { simpleCallback, simplePromise, chamarApiRest } from './callbacks';
 
 test('simple callback', () => {
     const result = simpleCallback(value => `Callback with value: ${value} was called`);
@@ -44,6 +44,19 @@ test('callback hell', () => {
  */
 test('http mock with callbacks', () => {
     
+    const funcaoSucesso = resultado => {
+        return `Resultado da execução da API: ${resultado}`;
+    };
+
+    const funcaoErro = erro => {
+        return `Erro ao executar API: ${erro}`;
+    };
+
+    const result = chamarApiRest('/api/treinamento', funcaoSucesso, funcaoErro);
+    expect(result).toEqual('Resultado da execução da API: sucesso')
+
+    const result2 = chamarApiRest('/api/treinamento2', funcaoSucesso, funcaoErro);
+    expect(result2).toEqual('Erro ao executar API: API não encontrada')
 });
 
 /**
@@ -53,5 +66,15 @@ test('http mock with callbacks', () => {
  *
  */
 test('http mock with callbacks chaining', () => {
+    const funcaoSucesso = resultado => {
+        return `Resultado da execução da API: ${resultado}`;        
+    };
 
+    const funcaoErro = erro => {
+        console.log(`Erro ao executar API: ${erro}. Tentando novamente...`);
+        return chamarApiRest('/api/treinamento', funcaoSucesso, funcaoErro)
+    };
+
+    const result = chamarApiRest('/api/treinamento2', funcaoSucesso, funcaoErro)
+    expect(result).toEqual('Resultado da execução da API: sucesso')
 });

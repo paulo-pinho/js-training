@@ -19,3 +19,12 @@ export const simpleCallback = (callback = () => 'Empty callback') => {
 
     return callback('My first callback');
 };
+
+export const chamarApiRest = (apiPath, callbackSucesso, callbackErro)  => {
+
+    if (apiPath == '/api/treinamento') {
+        return callbackSucesso('sucesso');
+    } else {
+        return callbackErro('API não encontrada');
+    };
+}
